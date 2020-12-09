@@ -85,9 +85,18 @@ void	*life(void *data)
 	gettimeofday(&(philo->birth), NULL);
 	philo->status = THINKING;
 	philo->last_eat = 0;
+	time = 0;
+	if (philo->num % 2 == 0)
+	{
+		usleep(1000);
+	}
 	while (1)
 	{
 		gettimeofday(&current, NULL);
+		// if (time != 0)
+		// {
+		// 	printf("while loop time: %ldms\n", get_timestamp_ms(&current, &philo->birth) - time);
+		// }
 		time = get_timestamp_ms(&current, &philo->birth);
 		if (time - philo->last_eat >= (long int)info.time_to_die)
 		{
@@ -97,15 +106,17 @@ void	*life(void *data)
 			break;
 		}
 
-		pthread_mutex_lock(&mutx);
-		if (philo->status == THINKING && philo->left_fork->status == 1 && philo->right_fork->status == 1)
+		if (philo->status == THINKING)
 		{
-			philo->left_fork->status = 0;
-			philo->right_fork->status = 0;
-			philo->status = TAKE_FORK;
+			pthread_mutex_lock(&mutx);
+			if (philo->left_fork->status == 1 && philo->right_fork->status == 1)
+			{
+				philo->left_fork->status = 0;
+				philo->right_fork->status = 0;
+				philo->status = TAKE_FORK;
+			}
+			pthread_mutex_unlock(&mutx);
 		}
-		pthread_mutex_unlock(&mutx);
-
 		if (philo->status == TAKE_FORK)
 		{
 			print_philo(philo);
@@ -135,6 +146,7 @@ void	*life(void *data)
 			philo->status = THINKING;
 			print_philo(philo);
 		}
+		usleep(10000);
 	}
 	return (0);
 }
