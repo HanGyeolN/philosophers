@@ -1,5 +1,31 @@
 #include "philosophers.h"
 
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putnbr(long nb)
+{
+	long long int n;
+	long long int div;
+	long long int mod;
+
+	n = (long long int)nb;
+	if (n < 0)
+	{
+		n = -n;
+		ft_putchar('-');
+	}
+	div = n / 10;
+	mod = n % 10;
+	if (n >= 10)
+	{
+		ft_putnbr(div);
+	}
+	ft_putchar(mod + '0');
+}
+
 void	ft_putstr(char *str)
 {
 	write(1, str, ft_strlen(str));
@@ -36,33 +62,6 @@ int		ft_atoi(const char *s)
 	{
 		ret = ret * 10 + (s[i] - '0') * sign;
 		i++;
-	}
-	return (ret);
-}
-
-char	*ft_itoa(int n)
-{
-	int		div;
-	int		len;
-	char	*ret;
-
-	div = n;
-	len = (n <= 0) ? 1 : 0;
-	while (div != 0)
-	{
-		div = div / 10;
-		len++;
-	}
-	if (!(ret = malloc(sizeof(char) * (len + 1))))
-		return (0);
-	ret[len] = '\0';
-	if (n <= 0)
-		ret[0] = (n == 0) ? '0' : '-';
-	while (n != 0)
-	{
-		len--;
-		ret[len] = (n > 0) ? (n % 10) + '0' : -(n % 10) + '0';
-		n = n / 10;
 	}
 	return (ret);
 }

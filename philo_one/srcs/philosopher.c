@@ -2,6 +2,7 @@
 
 t_info				info;
 pthread_mutex_t		mutx;
+struct timeval		current;
 
 int		set_philo_info(t_info *info,char **argv)
 {
@@ -27,14 +28,15 @@ int		check_philo_info(t_info *info)
 	return (0);
 }
 
-long int		get_timestamp_ms(struct timeval *current, struct timeval *birth)
+long int		get_timestamp_ms()
 {
-	long int	dsec;
-	int			dusec;
-	long int	dmsec;
+	long int		dsec;
+	int				dusec;
+	long int		dmsec;
 
-	dsec = current->tv_sec - birth->tv_sec;
-	dusec = (current->tv_usec - birth->tv_usec);
+	gettimeofday(&current, NULL);
+	dsec = current.tv_sec - info.birth.tv_sec;
+	dusec = (current.tv_usec - info.birth.tv_usec);
 	dmsec = dsec * 1000 + (long int)(dusec / 1000);
 	return (dmsec);
 }
@@ -47,30 +49,22 @@ long int		get_timestamp_ms(struct timeval *current, struct timeval *birth)
 
 long	print_philo(t_philosopher *philo)
 {
-	char			*str;
-	char			*temp;
-	struct timeval	current;
 	long			timestamp;
 
-	gettimeofday(&current, NULL);
-	timestamp = get_timestamp_ms(&current, &philo->birth);
-	str = ft_itoa(timestamp);
-	str = ft_strjoin(str, " ");
-	temp = ft_itoa(philo->num);
-	str = ft_strjoin(str, temp);
-	free(temp);
+	timestamp = get_timestamp_ms();
+	ft_putnbr(timestamp);
+	ft_putstr(" ");
+	ft_putnbr((long)philo->num);
 	if (philo->status == TAKE_FORK)
-		str = ft_strjoin(str, " has taken a fork\n");
+		ft_putstr(" has taken a fork\n");
 	else if (philo->status == EATING)
-		str = ft_strjoin(str, " is eating\n");
+		ft_putstr(" is eating\n");
 	else if (philo->status == SLEEPING)
-		str = ft_strjoin(str, " is sleeping\n");
+		ft_putstr(" is sleeping\n");
 	else if (philo->status == THINKING)
-		str = ft_strjoin(str, " is thinking\n");
+		ft_putstr(" is thinking\n");
 	else if (philo->status == DIED)
-		str = ft_strjoin(str, " died\n");
-	ft_putstr(str);
-	free(str);
+		ft_putstr(" died\n");
 	return (timestamp);
 }
 
@@ -79,74 +73,72 @@ void	*life(void *data)
 	struct timeval		current;
 	t_philosopher		*philo;
 	long				time;
-	long				stamp;
+	int					think_flag;
 
 	philo = (t_philosopher *)data;
-	gettimeofday(&(philo->birth), NULL);
 	philo->status = THINKING;
 	philo->last_eat = 0;
 	time = 0;
+	think_flag = 0;
 	if (philo->num % 2 == 0)
 	{
-		usleep(1000);
+		usleep(100);
 	}
 	while (1)
 	{
 		gettimeofday(&current, NULL);
-		// if (time != 0)
-		// {
-		// 	printf("while loop time: %ldms\n", get_timestamp_ms(&current, &philo->birth) - time);
-		// }
-		time = get_timestamp_ms(&current, &philo->birth);
+		time = get_timestamp_ms();
 		if (time - philo->last_eat >= (long int)info.time_to_die)
 		{
 			philo->status = DIED;
 			print_philo(philo);
-			printf("[delay: %ldms]\n", time);
+			printf("[delay: %ldms]\n", (time - philo->last_eat) - (long int)info.time_to_die);
 			break;
 		}
-
+		pthread_mutex_lock(&mutx);
 		if (philo->status == THINKING)
 		{
-			pthread_mutex_lock(&mutx);
+			if (think_flag == 1)
+				print_philo(philo);
 			if (philo->left_fork->status == 1 && philo->right_fork->status == 1)
 			{
 				philo->left_fork->status = 0;
 				philo->right_fork->status = 0;
 				philo->status = TAKE_FORK;
 			}
+			else
+				think_flag = 0;
 			pthread_mutex_unlock(&mutx);
 		}
-		if (philo->status == TAKE_FORK)
+		else if (philo->status == TAKE_FORK)
 		{
 			print_philo(philo);
+			pthread_mutex_unlock(&mutx);
 			philo->status = EATING;
 		}
 		else if (philo->status == EATING)
 		{
-			stamp = print_philo(philo);
+			print_philo(philo);
+			pthread_mutex_unlock(&mutx);
 			usleep(info.time_to_eat * 1000);
 
 			gettimeofday(&current, NULL);
-			philo->last_eat = get_timestamp_ms(&current, &philo->birth);
+			philo->last_eat = get_timestamp_ms();
 			
 			// drop fork
-			pthread_mutex_lock(&mutx);
 			philo->left_fork->status = 1;
 			philo->right_fork->status = 1;
-			pthread_mutex_unlock(&mutx);
 
 			philo->status = SLEEPING;
-			stamp = print_philo(philo);
 		}
 		else if (philo->status == SLEEPING)
 		{
-			usleep(info.time_to_sleep * 1000);
-
-			philo->status = THINKING;
 			print_philo(philo);
+			pthread_mutex_unlock(&mutx);
+			usleep(info.time_to_sleep * 1000);
+			philo->status = THINKING;
+			think_flag = 1;
 		}
-		usleep(10000);
 	}
 	return (0);
 }
@@ -186,8 +178,10 @@ int		philosophers(char **argv)
 	{
 		philos[i].left_fork = philos[i + 1].right_fork;
 	}
+
 	// 쓰레드 시작
 	i = 0;
+	gettimeofday(&info.birth, NULL);
 	while (i < info.number_of_philosophers)
 	{
 		pthread_create(&(ptds[i]), NULL, life, (void *)&(philos[i]));
