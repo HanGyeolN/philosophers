@@ -35,6 +35,7 @@ typedef struct	s_philosopher
 	int					num;
 	struct timeval		birth;
 	long int			last_eat;
+	int					eat_count;
 	int					status;
 }				t_philosopher;
 
@@ -42,6 +43,6 @@ void	ft_putstr(char *str);
 int		ft_strlen(char *str);
 int		ft_atoi(const char *s);
 char	*ft_itoa(int n);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2);
 
 #endif

@@ -39,10 +39,15 @@ long int		get_timestamp_ms(struct timeval *current, struct timeval *birth)
 	return (dmsec);
 }
 
+/*
+** 철학자 상태 출력
+** 여러 쓰레드가 서로 write를 하기때문에 문자 출력이 섞이는 경우가 있는데
+** 이를 막기위해서 문자열을 한번에 출력해야한다.
+*/
+
 long	print_philo(t_philosopher *philo)
 {
 	char			*str;
-	char			*str2;
 	char			*temp;
 	struct timeval	current;
 	long			timestamp;
@@ -50,25 +55,22 @@ long	print_philo(t_philosopher *philo)
 	gettimeofday(&current, NULL);
 	timestamp = get_timestamp_ms(&current, &philo->birth);
 	str = ft_itoa(timestamp);
-	str2 = ft_strjoin(str, " ");
-	free(str);
+	str = ft_strjoin(str, " ");
 	temp = ft_itoa(philo->num);
-	str = ft_strjoin(str2, temp);
+	str = ft_strjoin(str, temp);
 	free(temp);
-	free(str2);
 	if (philo->status == TAKE_FORK)
-		str2 = ft_strjoin(str, " has taken a fork\n");
+		str = ft_strjoin(str, " has taken a fork\n");
 	else if (philo->status == EATING)
-		str2 = ft_strjoin(str, " is eating\n");
+		str = ft_strjoin(str, " is eating\n");
 	else if (philo->status == SLEEPING)
-		str2 = ft_strjoin(str, " is sleeping\n");
+		str = ft_strjoin(str, " is sleeping\n");
 	else if (philo->status == THINKING)
-		str2 = ft_strjoin(str, " is thinking\n");
+		str = ft_strjoin(str, " is thinking\n");
 	else if (philo->status == DIED)
-		str2 = ft_strjoin(str, " died\n");
-	ft_putstr(str2);
+		str = ft_strjoin(str, " died\n");
+	ft_putstr(str);
 	free(str);
-	free(str2);
 	return (timestamp);
 }
 
@@ -146,18 +148,23 @@ int		philosophers(char **argv)
 	i = 0;
 	set_philo_info(&info, argv);
 	check_philo_info(&info);
+
+	// 쓰레드 생성
 	if (!(ptds = malloc(sizeof(pthread_t) * info.number_of_philosophers)))
 		return (1);
-	// 철학자 생성, 쓰레드 생성
+
+	// 철학자 생성
 	if (!(philos = malloc(sizeof(t_philosopher) * info.number_of_philosophers)))
 	{
 		free(ptds);
 		return (1);
 	}
+	// 포크 생성
 	while (i < info.number_of_philosophers)
 	{
 		philos[i].num = i + 1;
-		philos[i].right_fork = malloc(sizeof(t_fork) * 1);
+		if (!(philos[i].right_fork = malloc(sizeof(t_fork) * 1)))
+			return (1);
 		philos[i].right_fork->status = 1;
 		i++;
 	}
@@ -167,6 +174,7 @@ int		philosophers(char **argv)
 	{
 		philos[i].left_fork = philos[i + 1].right_fork;
 	}
+	// 쓰레드 시작
 	i = 0;
 	while (i < info.number_of_philosophers)
 	{

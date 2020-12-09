@@ -42,7 +42,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dst_size)
 	return (src_len);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*ret;
 	size_t	s1_len;
@@ -57,5 +57,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (0);
 	ft_strlcpy(ret, s1, s1_len + 1);
 	ft_strlcat(ret, s2, s1_len + s2_len + 1);
+	free(s1);
 	return (ret);
 }
