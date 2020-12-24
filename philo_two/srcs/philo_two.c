@@ -152,7 +152,6 @@ typedef struct	s_philo
 	int		last_eat;
 	int		eat_count;
 	int		status;
-	char	msg[100];
 }				t_philo;
 
 # define EATING 0
@@ -181,30 +180,9 @@ int		get_timestamp_ms()
 void	set_status(t_philo *philo, int status)
 {
 	int		timestamp;
-	char	*temp;
 
 	philo->status = status;
 	timestamp = get_timestamp_ms();
-	
-	// temp = ft_itoa(timestamp);
-	// ft_strlcat(philo->msg, temp, 100);
-	// free(temp);
-	// ft_strlcat(philo->msg, " ", 100);
-	// temp = ft_itoa(philo->num);
-	// ft_strlcat(philo->msg, temp, 100);
-	// free(temp);
-	// if (philo->status == TAKE_FORK)
-	// 	ft_strlcat(philo->msg, " has taken a fork\n", 100);
-	// else if (philo->status == EATING)
-	// 	ft_strlcat(philo->msg, " is eating\n", 100);
-	// else if (philo->status == SLEEPING)
-	// 	ft_strlcat(philo->msg, " is sleeping\n", 100);
-	// else if (philo->status == THINKING)
-	// 	ft_strlcat(philo->msg, " is thinking\n", 100);
-	// else if (philo->status == DIED)
-	// 	ft_strlcat(philo->msg, " died\n", 100);
-	// ft_putstr(philo->msg);
-
 	ft_putnbr(timestamp);
 	ft_putstr(" ");
 	ft_putnbr((long)philo->num);
@@ -218,7 +196,6 @@ void	set_status(t_philo *philo, int status)
 		ft_putstr(" is thinking\n");
 	else if (philo->status == DIED)
 		ft_putstr(" died\n");
-	// philo->msg[0] = '\0';
 }
 
 int		am_i_dead(t_philo *philo)
@@ -276,6 +253,40 @@ void	del_queue(t_thread_queue *queue, int num)
 	}
 }
 
+int		g_finish;
+
+void	*check_finish_option(void *data)
+{
+	int			i;
+	int			sum;
+	t_philo		*philos;
+
+	philos = (t_philo *)data;
+	while (1)
+	{
+		i = 0;
+		sum = 0;
+		while (i < info.number_of_philosophers)
+		{
+			if (philos[i].status == DIED || philos[i].eat_count >= info.number_of_times_each_philosopher_must_eat)
+				sum += 1;
+			i++;
+		}
+		if (sum == info.number_of_philosophers)
+		{
+			g_finish = 1;
+			return (0);
+		}
+	}
+}
+
+int		finish_check(void)
+{
+	if (g_finish == 1)
+		return (1);
+	return (0);
+}
+
 void	*life(void *data)
 {
 	t_philo		*philo;
@@ -286,6 +297,8 @@ void	*life(void *data)
 		usleep(100);
 	while (1)
 	{
+		if (g_finish == 1)
+			return (0);
 		if (philo->status == WAIT_FORK)
 		{
 			sem_wait(wait_sem);
@@ -305,6 +318,8 @@ void	*life(void *data)
 		}
 		if (philo->status == TAKE_FORK)
 		{
+			if (finish_check())
+				return (0);
 			sem_wait(mutex);
 			set_status(philo, EATING);
 			sem_post(mutex);
@@ -330,10 +345,12 @@ void	*life(void *data)
 			philo->last_eat = get_timestamp_ms();
 			set_status(philo, SLEEPING);
 			sem_post(mutex);
+			philo->eat_count += 1;
+			
 		}
 		if (philo->status == SLEEPING)
 		{
-			if (dead_check_sleep(philo, info.time_to_sleep) == 1)
+			if (dead_check_sleep(philo, info.time_to_sleep) == 1 || finish_check())
 			{
 				sem_wait(wait_sem);
 				del_queue(order, philo->num);
@@ -421,6 +438,7 @@ int		philo_two(char **argv)
 	temp = make_order(info.number_of_philosophers);
 	order = temp;
 	num_available_forks = info.number_of_philosophers;
+	g_finish = 0;
 
 	if (!(threads = malloc(sizeof(pthread_t) * info.number_of_philosophers)))
 	{
@@ -449,12 +467,17 @@ int		philo_two(char **argv)
 	sem_unlink("mutex");
 
 	gettimeofday(&(info.birth), NULL);
-	printf("thread created\n");
 	i = 0;
 	while (i < info.number_of_philosophers)
 	{
 		pthread_create(&threads[i], NULL, life, (void *)&philos[i]);
 		i++;
+	}
+	if (argv[5])
+	{
+		pthread_t	trd;
+		pthread_create(&trd, NULL, check_finish_option, (void *)philos);
+		pthread_detach(trd);
 	}
 	i = 0;
 	while (i < info.number_of_philosophers)
@@ -462,8 +485,6 @@ int		philo_two(char **argv)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
-	printf("thread end\n");
-	
 	sem_close(fork_sem);
 	sem_close(wait_sem);
 	sem_close(mutex);
