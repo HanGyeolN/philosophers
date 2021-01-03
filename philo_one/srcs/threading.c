@@ -1,4 +1,4 @@
-#include "philo_two.h"
+#include "philo_one.h"
 
 void	*check_finish_option(void *data)
 {
@@ -63,6 +63,44 @@ int		set_pthreads(pthread_t *threads, t_philo *philos)
 	return (0);
 }
 
+int		make_forks(t_philo *philos, int n)
+{
+	int		i;
+
+	i = 0;
+	while (i < n)
+	{
+		philos[i].num = i + 1;
+		if (!(philos[i].right_fork = malloc(sizeof(t_fork) * 1)))
+		{
+			while (--i >= 0)
+				free(philos[i].right_fork);
+			return (1);
+		}
+		philos[i].right_fork->status = 1;
+		i++;
+	}
+	i--;
+	philos[i].left_fork = philos[0].right_fork;
+	while (--i >= 0)
+		philos[i].left_fork = philos[i + 1].right_fork;
+	return (0);
+}
+
+void	clear_all(t_philo *philos, pthread_t *threads)
+{
+	int		i;
+
+	i = 0;
+	while (i < info.number_of_philosophers)
+	{
+		free(philos[i].left_fork);
+		i++;
+	}
+	free(threads);
+	free(philos);
+}
+
 int		threading(void)
 {
 	pthread_t	*threads;
@@ -75,8 +113,13 @@ int		threading(void)
 		free(philos);
 		return (0);
 	}
+	if (make_forks(philos, info.number_of_philosophers) != 0)
+	{
+		free(philos);
+		free(threads);
+		return (0);
+	}
 	set_pthreads(threads, philos);
-	free(threads);
-	free(philos);
+	clear_all(philos, threads);
 	return (1);
 }

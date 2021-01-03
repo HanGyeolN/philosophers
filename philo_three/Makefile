@@ -1,7 +1,7 @@
 
 .PHONY: all clean fclean re
 
-NAME = philo_one
+NAME = philo_three
 
 CC = gcc
 
@@ -11,7 +11,7 @@ HEADER_DIR = srcs
 
 SRC_DIR = ./srcs
 
-SRC = ft_string.c	life_utils.c	life.c	threading.c	philo_one.c
+SRC = ft_string.c	life_utils.c	life.c	processing.c	philo_three.c
 
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC))
 
