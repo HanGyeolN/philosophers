@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/04 08:43:43 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 08:44:29 by hna              ###   ########.fr       */
+/*   Created: 2021/01/04 09:02:58 by hna               #+#    #+#             */
+/*   Updated: 2021/01/04 09:10:44 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int		get_timestamp_ms(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	ret = (int)(tv.tv_sec - info.birth.tv_sec) * 1000 + \
-			(tv.tv_usec - info.birth.tv_usec) / 1000;
+	ret = (int)(tv.tv_sec - g_info.birth.tv_sec) * 1000 + \
+			(tv.tv_usec - g_info.birth.tv_usec) / 1000;
 	return (ret);
 }
 
@@ -49,11 +49,11 @@ int		am_i_dead(t_philo *philo)
 	int		no_eat_duration;
 
 	no_eat_duration = get_timestamp_ms() - philo->last_eat;
-	if (no_eat_duration >= info.time_to_die)
+	if (no_eat_duration >= g_info.time_to_die)
 	{
-		pthread_mutex_lock(&print_lock);
+		pthread_mutex_lock(&g_print_lock);
 		set_status(philo, DIED);
-		pthread_mutex_unlock(&print_lock);
+		pthread_mutex_unlock(&g_print_lock);
 		return (1);
 	}
 	return (0);

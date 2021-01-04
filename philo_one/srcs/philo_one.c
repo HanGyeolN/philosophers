@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 08:45:15 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 08:45:17 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/04 09:11:51 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 int		set_mutex(void)
 {
-	pthread_mutex_init(&print_lock, NULL);
-	pthread_mutex_init(&fork_lock, NULL);
+	pthread_mutex_init(&g_print_lock, NULL);
+	pthread_mutex_init(&g_fork_lock, NULL);
 	return (0);
 }
 
 int		close_mutex(void)
 {
-	pthread_mutex_destroy(&print_lock);
-	pthread_mutex_destroy(&fork_lock);
+	pthread_mutex_destroy(&g_print_lock);
+	pthread_mutex_destroy(&g_fork_lock);
 	return (0);
 }
 
 int		init_options(char **argv)
 {
-	info.number_of_philosophers = ft_atoi(argv[1]);
-	info.time_to_die = ft_atoi(argv[2]);
-	info.time_to_eat = ft_atoi(argv[3]);
-	info.time_to_sleep = ft_atoi(argv[4]);
-	info.must_eat = -1;
+	g_info.number_of_philosophers = ft_atoi(argv[1]);
+	g_info.time_to_die = ft_atoi(argv[2]);
+	g_info.time_to_eat = ft_atoi(argv[3]);
+	g_info.time_to_sleep = ft_atoi(argv[4]);
+	g_info.must_eat = -1;
 	if (argv[5])
-		info.must_eat = ft_atoi(argv[5]);
+		g_info.must_eat = ft_atoi(argv[5]);
 	g_finish = 0;
 	return (0);
 }
