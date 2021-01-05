@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:55:41 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 15:55:43 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/06 02:43:04 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ pthread_mutex_t	g_print_lock;
 pthread_mutex_t	g_fork_lock;
 int				g_finish;
 t_info			g_info;
+int				*g_order;
+int				g_now;
 
 void			ft_putchar(char c);
 void			ft_putnbr(long nb);
@@ -63,6 +65,7 @@ int				ft_strlen(char *str);
 void			ft_putstr(char *str);
 int				ft_atoi(const char *s);
 
+int				make_order(void);
 int				threading(void);
 void			*life(void *data);
 void			*check_finish_option(void *data);

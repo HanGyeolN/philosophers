@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 09:18:48 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 09:18:51 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/06 03:11:07 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,26 @@
 void	wait_fork(t_philo *philo)
 {
 	pthread_mutex_lock(&g_fork_lock);
-	if (philo->left_fork->status == 1 && philo->right_fork->status == 1)
+	if (g_order[g_now] == 0)
+	{
+		g_now++;
+		if (g_now == g_info.number_of_philosophers)
+			g_now = 0;
+		pthread_mutex_unlock(&g_fork_lock);
+	}
+	else if (philo->left_fork->status == 1 && philo->right_fork->status == 1 && g_order[g_now] == philo->num)
 	{
 		philo->left_fork->status = 0;
 		philo->right_fork->status = 0;
+		if (g_now == g_info.number_of_philosophers - 1)
+			g_now = 0;
+		else
+			g_now++;
+		pthread_mutex_lock(&g_print_lock);
+		set_status(philo, TAKE_FORK);
+		set_status(philo, TAKE_FORK);
+		pthread_mutex_unlock(&g_print_lock);
 		pthread_mutex_unlock(&g_fork_lock);
-		pthread_mutex_lock(&g_print_lock);
-		set_status(philo, TAKE_FORK);
-		pthread_mutex_unlock(&g_print_lock);
-		pthread_mutex_lock(&g_print_lock);
-		set_status(philo, TAKE_FORK);
-		pthread_mutex_unlock(&g_print_lock);
 	}
 	else
 		pthread_mutex_unlock(&g_fork_lock);

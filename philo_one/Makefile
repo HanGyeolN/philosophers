@@ -11,7 +11,7 @@ HEADER_DIR = srcs
 
 SRC_DIR = ./srcs
 
-SRC = ft_string.c	life_utils.c	life.c	threading.c	philo_one.c
+SRC = ft_string.c	life_utils.c	life.c	threading.c	philo_one.c	utils.c
 
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC))
 

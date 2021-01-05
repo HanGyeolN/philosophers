@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 16:02:18 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 16:03:14 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/06 02:52:54 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ sem_t			*g_sp_print;
 int				g_num_available_forks;
 int				g_finish;
 t_info			g_info;
+int				*g_order;
+int				g_now;
 
 void			ft_putchar(char c);
 void			ft_putnbr(long nb);

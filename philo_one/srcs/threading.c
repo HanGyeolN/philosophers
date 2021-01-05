@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:56:35 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 15:57:15 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/06 02:50:44 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,26 @@ int			make_forks(t_philo *philos, int n)
 	return (0);
 }
 
-void		clear_all(t_philo *philos, pthread_t *threads)
+int			clear_all(t_philo *philos, pthread_t *threads, int f, int o)
 {
 	int		i;
 
 	i = 0;
-	while (i < g_info.number_of_philosophers)
+	if (o)
+		free(g_order);
+	if (f)
 	{
-		free(philos[i].left_fork);
-		i++;
+		while (i < g_info.number_of_philosophers)
+		{
+			free(philos[i].left_fork);
+			i++;
+		}
 	}
-	free(threads);
-	free(philos);
+	if (threads)
+		free(threads);
+	if (philos)
+		free(philos);
+	return (0);
 }
 
 int			threading(void)
@@ -95,17 +103,12 @@ int			threading(void)
 	if (!(philos = make_philos(g_info.number_of_philosophers)))
 		return (0);
 	if (!(threads = malloc(sizeof(pthread_t) * g_info.number_of_philosophers)))
-	{
-		free(philos);
-		return (0);
-	}
+		return (clear_all(philos, 0, 0, 0));
 	if (make_forks(philos, g_info.number_of_philosophers) != 0)
-	{
-		free(philos);
-		free(threads);
-		return (0);
-	}
+		return (clear_all(philos, threads, 0, 0));
+	if (make_order() == 0)
+		return (clear_all(philos, threads, 1, 0));
 	set_pthreads(threads, philos);
-	clear_all(philos, threads);
+	clear_all(philos, threads, 1, 1);
 	return (1);
 }
