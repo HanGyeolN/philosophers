@@ -2,7 +2,7 @@
 
 int		set_semaphores(void)
 {
-	fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, info.number_of_philosophers);
+	fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, g_info.number_of_philosophers);
 	g_sp_nfork = sem_open("g_sp_nfork", O_CREAT | O_EXCL, 0644, 1);
 	g_sp_print = sem_open("g_sp_print", O_CREAT | O_EXCL, 0644, 1);
 	sem_unlink("forks");
@@ -21,14 +21,14 @@ int		close_semaphores(void)
 
 int		init_options(char **argv)
 {
-	info.number_of_philosophers = ft_atoi(argv[1]);
-	info.time_to_die = ft_atoi(argv[2]);
-	info.time_to_eat = ft_atoi(argv[3]);
-	info.time_to_sleep = ft_atoi(argv[4]);
-	info.must_eat = -1;
+	g_info.number_of_philosophers = ft_atoi(argv[1]);
+	g_info.time_to_die = ft_atoi(argv[2]);
+	g_info.time_to_eat = ft_atoi(argv[3]);
+	g_info.time_to_sleep = ft_atoi(argv[4]);
+	g_info.must_eat = -1;
 	if (argv[5])
-		info.must_eat = ft_atoi(argv[5]);
-	num_available_forks = info.number_of_philosophers;
+		g_info.must_eat = ft_atoi(argv[5]);
+	g_num_available_forks = g_info.number_of_philosophers;
 	g_finish = 0;
 	return (0);
 }

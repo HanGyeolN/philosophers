@@ -11,13 +11,13 @@ void	*check_finish_option(void *data)
 	{
 		i = 0;
 		sum = 0;
-		while (i < info.number_of_philosophers)
+		while (i < g_info.number_of_philosophers)
 		{
-			if (philos[i].status == DIED || philos[i].eat_count >= info.must_eat)
+			if (philos[i].status == DIED || philos[i].eat_count >= g_info.must_eat)
 				sum += 1;
 			i++;
 		}
-		if (sum == info.number_of_philosophers)
+		if (sum == g_info.number_of_philosophers)
 		{
 			g_finish = 1;
 			return (0);
@@ -48,17 +48,17 @@ int		set_pthreads(pthread_t *threads, t_philo *philos)
 	int			i;
 	pthread_t	trd;
 
-	gettimeofday(&(info.birth), NULL);
-	if (info.must_eat != -1)
+	gettimeofday(&(g_info.birth), NULL);
+	if (g_info.must_eat != -1)
 	{
 		pthread_create(&trd, NULL, check_finish_option, (void *)philos);
 		pthread_detach(trd);
 	}
 	i = -1;
-	while (++i < info.number_of_philosophers)
+	while (++i < g_info.number_of_philosophers)
 		pthread_create(&threads[i], NULL, life, (void *)&philos[i]);
 	i = -1;
-	while (++i < info.number_of_philosophers)
+	while (++i < g_info.number_of_philosophers)
 		pthread_join(threads[i], NULL);
 	return (0);
 }
@@ -68,9 +68,9 @@ int		threading(void)
 	pthread_t	*threads;
 	t_philo		*philos;
 
-	if (!(philos = make_philos(info.number_of_philosophers)))
+	if (!(philos = make_philos(g_info.number_of_philosophers)))
 		return (0);
-	if (!(threads = malloc(sizeof(pthread_t) * info.number_of_philosophers)))
+	if (!(threads = malloc(sizeof(pthread_t) * g_info.number_of_philosophers)))
 	{
 		free(philos);
 		return (0);

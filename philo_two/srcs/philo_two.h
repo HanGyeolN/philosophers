@@ -11,11 +11,11 @@
 
 typedef struct	s_info
 {
-	int		        number_of_philosophers;
-	int		        time_to_die;
-	int		        time_to_eat;
-	int		        time_to_sleep;
-	int		        must_eat;
+	int				number_of_philosophers;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				must_eat;
 	struct timeval	birth;
 }				t_info;
 
@@ -37,9 +37,9 @@ typedef struct	s_philo
 sem_t	*g_fork_sem;
 sem_t	*g_sp_nfork;
 sem_t	*g_sp_print;
-int		num_available_forks;
+int		g_num_available_forks;
 int		g_finish;
-t_info	info;
+t_info	g_info;
 
 void	ft_putchar(char c);
 void	ft_putnbr(long nb);
