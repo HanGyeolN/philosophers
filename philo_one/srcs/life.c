@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 09:18:48 by hna               #+#    #+#             */
-/*   Updated: 2021/01/06 03:11:07 by hna              ###   ########seoul.kr  */
+/*   Updated: 2021/01/06 03:14:08 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	wait_fork(t_philo *philo)
 			g_now = 0;
 		pthread_mutex_unlock(&g_fork_lock);
 	}
-	else if (philo->left_fork->status == 1 && philo->right_fork->status == 1 && g_order[g_now] == philo->num)
+	else if (philo->left_fork->status == 1 && philo->right_fork->status == 1 \
+		&& g_order[g_now] == philo->num)
 	{
 		philo->left_fork->status = 0;
 		philo->right_fork->status = 0;
