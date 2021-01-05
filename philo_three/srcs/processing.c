@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 16:07:27 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 16:07:28 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/05 16:12:22 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,23 @@ t_philo		*make_philos(int nb_philos)
 	return (philos);
 }
 
-int		processing(void)
+int			wait_child_process(pid_t *pids)
 {
+	int		i;
+	int		ret;
+
+	i = 0;
+	while (i < g_info.number_of_philosophers)
+	{
+		waitpid(pids[i], &ret, 0);
+		i++;
+	}
+	return (0);
+}
+
+int			processing(void)
+{
+	int			i;
 	pid_t		*pids;
 	t_philo		*philos;
 
@@ -38,10 +53,9 @@ int		processing(void)
 		return (0);
 	if (!(pids = malloc(sizeof(pid_t) * g_info.number_of_philosophers)))
 		return (0);
-	int			i;
-	i = 0;
+	i = -1;
 	gettimeofday(&(g_info.birth), NULL);
-	while (i < g_info.number_of_philosophers)
+	while (++i < g_info.number_of_philosophers)
 	{
 		pids[i] = fork();
 		if (pids[i] == 0)
@@ -49,15 +63,8 @@ int		processing(void)
 			life(&philos[i]);
 			exit(0);
 		}
-		i++;
 	}
-	i = 0;
-	int		ret;
-	while (i < g_info.number_of_philosophers)
-	{
-		waitpid(pids[i], &ret, 0);
-		i++;
-	}
+	wait_child_process(pids);
 	free(philos);
 	free(pids);
 	return (1);
