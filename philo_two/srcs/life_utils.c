@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 16:02:05 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 16:02:07 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/06 03:25:12 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,22 @@ void	set_status(t_philo *philo, int status)
 
 int		am_i_dead(t_philo *philo)
 {
+	int		i;
 	int		no_eat_duration;
 
+	i = 0;
 	no_eat_duration = get_timestamp_ms() - philo->last_eat;
 	if (no_eat_duration >= g_info.time_to_die)
 	{
+		if (philo->num % 2 == 1)
+			i = philo->num / 2;
+		else if (g_info.number_of_philosophers % 2 == 0)
+			i = g_info.number_of_philosophers / 2 + philo->num / 2 - 1;
+		else
+			i = g_info.number_of_philosophers / 2 + philo->num / 2;
+		sem_wait(g_sp_nfork);
+		g_order[i] = 0;
+		sem_post(g_sp_nfork);
 		sem_wait(g_sp_print);
 		set_status(philo, DIED);
 		sem_post(g_sp_print);

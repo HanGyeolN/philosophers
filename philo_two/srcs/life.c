@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 16:01:55 by hna               #+#    #+#             */
-/*   Updated: 2021/01/06 02:55:21 by hna              ###   ########seoul.kr  */
+/*   Updated: 2021/01/06 03:23:07 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,24 @@
 void	wait_fork(t_philo *philo)
 {
 	sem_wait(g_sp_nfork);
-	if (g_num_available_forks >= 2 && )
+	if (g_order[g_now] == 0)
+	{
+		g_now++;
+		if (g_now == g_info.number_of_philosophers)
+			g_now = 0;
+		sem_post(g_sp_nfork);
+	}
+	else if (g_num_available_forks >= 2 && g_order[g_now] == philo->num)
 	{
 		g_num_available_forks -= 2;
+		g_now++;
+		if (g_now == g_info.number_of_philosophers)
+			g_now = 0;
 		sem_post(g_sp_nfork);
+		sem_wait(g_fork_sem);
 		sem_wait(g_fork_sem);
 		sem_wait(g_sp_print);
 		set_status(philo, TAKE_FORK);
-		sem_post(g_sp_print);
-		sem_wait(g_fork_sem);
-		sem_wait(g_sp_print);
 		set_status(philo, TAKE_FORK);
 		sem_post(g_sp_print);
 	}

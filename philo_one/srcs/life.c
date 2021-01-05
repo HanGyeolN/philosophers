@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 09:18:48 by hna               #+#    #+#             */
-/*   Updated: 2021/01/06 03:14:08 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/06 03:21:36 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ void	wait_fork(t_philo *philo)
 	{
 		philo->left_fork->status = 0;
 		philo->right_fork->status = 0;
-		if (g_now == g_info.number_of_philosophers - 1)
+		g_now++;
+		if (g_now == g_info.number_of_philosophers)
 			g_now = 0;
-		else
-			g_now++;
 		pthread_mutex_lock(&g_print_lock);
 		set_status(philo, TAKE_FORK);
 		set_status(philo, TAKE_FORK);
