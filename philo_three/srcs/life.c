@@ -12,9 +12,15 @@
 
 #include "philo_three.h"
 
-void	wait_fork(t_philo *philo)
+int		wait_fork(t_philo *philo)
 {
-	sem_wait(g_sp_nfork);
+	if (g_info.number_of_philosophers == 1)
+	{
+		usleep(g_info.time_to_die);
+		return (0);
+	}
+	if (am_i_dead(philo) == 1)
+		return (1);
 	sem_wait(g_fork_sem);
 	sem_wait(g_sp_print);
 	set_status(philo, TAKE_FORK);
@@ -23,13 +29,11 @@ void	wait_fork(t_philo *philo)
 	sem_wait(g_sp_print);
 	set_status(philo, TAKE_FORK);
 	sem_post(g_sp_print);
-	sem_post(g_sp_nfork);
+	return (0);
 }
 
 int		take_fork(t_philo *philo)
 {
-	if (am_i_dead(philo))
-		return (1);
 	sem_wait(g_sp_print);
 	set_status(philo, EATING);
 	sem_post(g_sp_print);
@@ -76,8 +80,8 @@ void	*life(void *data)
 	{
 		if (g_info.must_eat != -1 && philo->eat_count >= g_info.must_eat)
 			return (0);
-		if (philo->status == WAIT_FORK)
-			wait_fork(philo);
+		if (philo->status == WAIT_FORK && wait_fork(philo))
+			return (0);
 		if (philo->status == TAKE_FORK && take_fork(philo))
 			return (0);
 		if (philo->status == EATING && eating(philo))
