@@ -6,19 +6,19 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 16:02:24 by hna               #+#    #+#             */
-/*   Updated: 2021/01/06 02:54:21 by hna              ###   ########seoul.kr  */
+/*   Updated: 2021/01/06 03:27:41 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int 		make_order(void)
+int			make_order(void)
 {
 	int		i;
 	int		idx;
 
 	if (!(g_order = malloc(sizeof(int) * g_info.number_of_philosophers)))
-        return (0);
+		return (0);
 	g_now = 0;
 	idx = 0;
 	i = 1;
@@ -35,7 +35,7 @@ int 		make_order(void)
 		i += 2;
 		idx++;
 	}
-    return (1);
+	return (1);
 }
 
 void		*check_finish_option(void *data)
