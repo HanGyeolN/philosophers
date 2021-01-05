@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/05 16:02:18 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 16:03:14 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_TWO_H
 # define PHILO_TWO_H
 
@@ -34,26 +46,26 @@ typedef struct	s_philo
 # define DIED 4
 # define WAIT_FORK 5
 
-sem_t	*g_fork_sem;
-sem_t	*g_sp_nfork;
-sem_t	*g_sp_print;
-int		g_num_available_forks;
-int		g_finish;
-t_info	g_info;
+sem_t			*g_fork_sem;
+sem_t			*g_sp_nfork;
+sem_t			*g_sp_print;
+int				g_num_available_forks;
+int				g_finish;
+t_info			g_info;
 
-void	ft_putchar(char c);
-void	ft_putnbr(long nb);
-int		ft_strlen(char *str);
-void	ft_putstr(char *str);
-int		ft_atoi(const char *s);
+void			ft_putchar(char c);
+void			ft_putnbr(long nb);
+int				ft_strlen(char *str);
+void			ft_putstr(char *str);
+int				ft_atoi(const char *s);
 
-int		threading(void);
-void	*life(void *data);
-void	*check_finish_option(void *data);
+int				threading(void);
+void			*life(void *data);
+void			*check_finish_option(void *data);
 
-int		get_timestamp_ms(void);
-void	set_status(t_philo *philo, int status);
-int		am_i_dead(t_philo *philo);
-int		dead_check_sleep(t_philo *philo, int sleep_time);
+int				get_timestamp_ms(void);
+void			set_status(t_philo *philo, int status);
+int				am_i_dead(t_philo *philo);
+int				dead_check_sleep(t_philo *philo, int sleep_time);
 
 #endif

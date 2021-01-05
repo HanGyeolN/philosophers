@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_two.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/05 16:02:11 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 16:05:43 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_two.h"
 
 int		set_semaphores(void)
 {
-	fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, g_info.number_of_philosophers);
+	g_fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, \
+						g_info.number_of_philosophers);
 	g_sp_nfork = sem_open("g_sp_nfork", O_CREAT | O_EXCL, 0644, 1);
 	g_sp_print = sem_open("g_sp_print", O_CREAT | O_EXCL, 0644, 1);
 	sem_unlink("forks");
@@ -13,7 +26,7 @@ int		set_semaphores(void)
 
 int		close_semaphores(void)
 {
-	sem_close(fork_sem);
+	sem_close(g_fork_sem);
 	sem_close(g_sp_nfork);
 	sem_close(g_sp_print);
 	return (0);

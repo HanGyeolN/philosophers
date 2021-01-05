@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/05 16:07:07 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 16:09:37 by hna              ###   ########seoul.kr  */
+/*   Created: 2021/01/05 16:15:06 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 16:15:54 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 int		get_timestamp_ms(void)
 {
-	int		ret;
+	int				ret;
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	ret = (int)(tv.tv_sec - g_info.birth.tv_sec) * 1000 + (tv.tv_usec - g_info.birth.tv_usec) / 1000;
+	ret = (int)(tv.tv_sec - g_info.birth.tv_sec) * 1000 + \
+			(tv.tv_usec - g_info.birth.tv_usec) / 1000;
 	return (ret);
 }
 

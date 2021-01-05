@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   threading.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/05 16:02:24 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 16:04:30 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_two.h"
 
-void	*check_finish_option(void *data)
+void		*check_finish_option(void *data)
 {
 	int			i;
 	int			sum;
@@ -13,7 +25,8 @@ void	*check_finish_option(void *data)
 		sum = 0;
 		while (i < g_info.number_of_philosophers)
 		{
-			if (philos[i].status == DIED || philos[i].eat_count >= g_info.must_eat)
+			if (philos[i].status == DIED || \
+				philos[i].eat_count >= g_info.must_eat)
 				sum += 1;
 			i++;
 		}
@@ -43,7 +56,7 @@ t_philo		*make_philos(int nb_philos)
 	return (philos);
 }
 
-int		set_pthreads(pthread_t *threads, t_philo *philos)
+int			set_pthreads(pthread_t *threads, t_philo *philos)
 {
 	int			i;
 	pthread_t	trd;
@@ -63,7 +76,7 @@ int		set_pthreads(pthread_t *threads, t_philo *philos)
 	return (0);
 }
 
-int		threading(void)
+int			threading(void)
 {
 	pthread_t	*threads;
 	t_philo		*philos;

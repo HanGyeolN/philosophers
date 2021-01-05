@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/05 16:07:01 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 16:09:32 by hna              ###   ########seoul.kr  */
+/*   Created: 2021/01/05 16:16:40 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 16:16:57 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	wait_fork(t_philo *philo)
 	sem_post(g_sp_nfork);
 }
 
-int     take_fork(t_philo *philo)
+int		take_fork(t_philo *philo)
 {
 	if (am_i_dead(philo))
 		return (1);
@@ -36,7 +36,7 @@ int     take_fork(t_philo *philo)
 	return (0);
 }
 
-int     eating(t_philo *philo)
+int		eating(t_philo *philo)
 {
 	if (dead_check_sleep(philo, g_info.time_to_eat) == 1)
 	{
@@ -54,7 +54,7 @@ int     eating(t_philo *philo)
 	return (0);
 }
 
-int     sleeping(t_philo *philo)
+int		sleeping(t_philo *philo)
 {
 	if (dead_check_sleep(philo, g_info.time_to_sleep) == 1)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 16:07:12 by hna               #+#    #+#             */
-/*   Updated: 2021/01/05 16:07:14 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/05 16:16:17 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int		set_semaphores(void)
 {
-	g_fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, g_info.number_of_philosophers);
+	g_fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, \
+							g_info.number_of_philosophers);
 	g_sp_nfork = sem_open("g_sp_nfork", O_CREAT | O_EXCL, 0644, 1);
 	g_sp_print = sem_open("g_sp_print", O_CREAT | O_EXCL, 0644, 1);
 	sem_unlink("forks");

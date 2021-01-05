@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   life.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/05 16:01:55 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 16:05:01 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_two.h"
 
 void	wait_fork(t_philo *philo)
@@ -20,7 +32,7 @@ void	wait_fork(t_philo *philo)
 		sem_post(g_sp_nfork);
 }
 
-int	take_fork(t_philo *philo)
+int		take_fork(t_philo *philo)
 {
 	if (g_finish == 1)
 		return (1);
@@ -30,7 +42,7 @@ int	take_fork(t_philo *philo)
 	return (0);
 }
 
-int	 eating(t_philo *philo)
+int		eating(t_philo *philo)
 {
 	if (dead_check_sleep(philo, g_info.time_to_eat) == 1)
 	{
@@ -54,7 +66,7 @@ int	 eating(t_philo *philo)
 	return (0);
 }
 
-int	 sleeping(t_philo *philo)
+int		sleeping(t_philo *philo)
 {
 	if (dead_check_sleep(philo, g_info.time_to_sleep) == 1 || g_finish == 1)
 		return (1);

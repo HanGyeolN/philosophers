@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/04 09:15:58 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 09:41:50 by hna              ###   ########seoul.kr  */
+/*   Created: 2021/01/05 15:56:35 by hna               #+#    #+#             */
+/*   Updated: 2021/01/05 15:57:15 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_philo		*make_philos(int nb_philos)
 	return (philos);
 }
 
-int		set_pthreads(pthread_t *threads, t_philo *philos)
+int			set_pthreads(pthread_t *threads, t_philo *philos)
 {
 	int			i;
 	pthread_t	trd;
@@ -49,7 +49,7 @@ int		set_pthreads(pthread_t *threads, t_philo *philos)
 	return (0);
 }
 
-int		make_forks(t_philo *philos, int n)
+int			make_forks(t_philo *philos, int n)
 {
 	int		i;
 
@@ -73,7 +73,7 @@ int		make_forks(t_philo *philos, int n)
 	return (0);
 }
 
-void	clear_all(t_philo *philos, pthread_t *threads)
+void		clear_all(t_philo *philos, pthread_t *threads)
 {
 	int		i;
 
@@ -87,7 +87,7 @@ void	clear_all(t_philo *philos, pthread_t *threads)
 	free(philos);
 }
 
-int		threading(void)
+int			threading(void)
 {
 	pthread_t	*threads;
 	t_philo		*philos;
