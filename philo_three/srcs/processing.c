@@ -22,14 +22,14 @@ int		processing(void)
 	pid_t		*pids;
 	t_philo		*philos;
 
-	if (!(philos = make_philos(info.number_of_philosophers)))
+	if (!(philos = make_philos(g_info.number_of_philosophers)))
 		return (0);
-	if (!(pids = malloc(sizeof(pid_t) * info.number_of_philosophers)))
+	if (!(pids = malloc(sizeof(pid_t) * g_info.number_of_philosophers)))
 		return (0);
 	int			i;
 	i = 0;
-	gettimeofday(&(info.birth), NULL);
-	while (i < info.number_of_philosophers)
+	gettimeofday(&(g_info.birth), NULL);
+	while (i < g_info.number_of_philosophers)
 	{
 		pids[i] = fork();
 		if (pids[i] == 0)
@@ -41,7 +41,7 @@ int		processing(void)
 	}
 	i = 0;
 	int		ret;
-	while (i < info.number_of_philosophers)
+	while (i < g_info.number_of_philosophers)
 	{
 		waitpid(pids[i], &ret, 0);
 		i++;

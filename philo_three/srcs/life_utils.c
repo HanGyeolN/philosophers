@@ -6,7 +6,7 @@ int		get_timestamp_ms(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	ret = (int)(tv.tv_sec - info.birth.tv_sec) * 1000 + (tv.tv_usec - info.birth.tv_usec) / 1000;
+	ret = (int)(tv.tv_sec - g_info.birth.tv_sec) * 1000 + (tv.tv_usec - g_info.birth.tv_usec) / 1000;
 	return (ret);
 }
 
@@ -36,11 +36,11 @@ int		am_i_dead(t_philo *philo)
 	int		no_eat_duration;
 
 	no_eat_duration = get_timestamp_ms() - philo->last_eat;
-	if (no_eat_duration >= info.time_to_die)
+	if (no_eat_duration >= g_info.time_to_die)
 	{
-		sem_wait(sp_print);
+		sem_wait(g_sp_print);
 		set_status(philo, DIED);
-		sem_post(sp_print);
+		sem_post(g_sp_print);
 		return (1);
 	}
 	return (0);

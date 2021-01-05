@@ -27,10 +27,10 @@ typedef struct	s_philo
 	int		status;
 }				t_philo;
 
-sem_t	*fork_sem;
-sem_t	*sp_nfork;
-sem_t	*sp_print;
-t_info	info;
+sem_t	*g_fork_sem;
+sem_t	*g_sp_nfork;
+sem_t	*g_sp_print;
+t_info	g_info;
 
 # define EATING 0
 # define SLEEPING 1

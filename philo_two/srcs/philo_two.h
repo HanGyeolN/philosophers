@@ -34,9 +34,9 @@ typedef struct	s_philo
 # define DIED 4
 # define WAIT_FORK 5
 
-sem_t	*fork_sem;
-sem_t	*sp_nfork;
-sem_t	*sp_print;
+sem_t	*g_fork_sem;
+sem_t	*g_sp_nfork;
+sem_t	*g_sp_print;
 int		num_available_forks;
 int		g_finish;
 t_info	info;

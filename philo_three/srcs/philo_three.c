@@ -2,32 +2,32 @@
 
 int		set_semaphores(void)
 {
-	fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, info.number_of_philosophers);
-	sp_nfork = sem_open("sp_nfork", O_CREAT | O_EXCL, 0644, 1);
-	sp_print = sem_open("sp_print", O_CREAT | O_EXCL, 0644, 1);
+	g_fork_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, g_info.number_of_philosophers);
+	g_sp_nfork = sem_open("g_sp_nfork", O_CREAT | O_EXCL, 0644, 1);
+	g_sp_print = sem_open("g_sp_print", O_CREAT | O_EXCL, 0644, 1);
 	sem_unlink("forks");
-	sem_unlink("sp_nfork");
-	sem_unlink("sp_print");
+	sem_unlink("g_sp_nfork");
+	sem_unlink("g_sp_print");
 	return (0);
 }
 
 int		close_semaphores(void)
 {
-	sem_close(fork_sem);
-	sem_close(sp_nfork);
-	sem_close(sp_print);
+	sem_close(g_fork_sem);
+	sem_close(g_sp_nfork);
+	sem_close(g_sp_print);
 	return (0);
 }
 
 int		init_options(char **argv)
 {
-	info.number_of_philosophers = ft_atoi(argv[1]);
-	info.time_to_die = ft_atoi(argv[2]);
-	info.time_to_eat = ft_atoi(argv[3]);
-	info.time_to_sleep = ft_atoi(argv[4]);
-	info.must_eat = -1;
+	g_info.number_of_philosophers = ft_atoi(argv[1]);
+	g_info.time_to_die = ft_atoi(argv[2]);
+	g_info.time_to_eat = ft_atoi(argv[3]);
+	g_info.time_to_sleep = ft_atoi(argv[4]);
+	g_info.must_eat = -1;
 	if (argv[5])
-		info.must_eat = ft_atoi(argv[5]);
+		g_info.must_eat = ft_atoi(argv[5]);
 	return (0);
 }
 

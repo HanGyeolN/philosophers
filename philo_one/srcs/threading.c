@@ -6,37 +6,11 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 09:15:58 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 09:16:03 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/04 09:41:50 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-
-void	*check_finish_option(void *data)
-{
-	int			i;
-	int			sum;
-	t_philo		*philos;
-
-	philos = (t_philo *)data;
-	while (1)
-	{
-		i = 0;
-		sum = 0;
-		while (i < g_info.number_of_philosophers)
-		{
-			if (philos[i].status == DIED || philos[i].eat_count >= g_info.must_eat)
-				sum += 1;
-			i++;
-		}
-		if (sum == g_info.number_of_philosophers)
-		{
-			g_finish = 1;
-			return (0);
-		}
-		usleep(100000);
-	}
-}
 
 t_philo		*make_philos(int nb_philos)
 {

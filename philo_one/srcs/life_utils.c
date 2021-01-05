@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 09:15:28 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 09:15:34 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/04 09:42:46 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,31 @@ int		dead_check_sleep(t_philo *philo, int sleep_time)
 			return (1);
 	}
 	return (0);
+}
+
+void	*check_finish_option(void *data)
+{
+	int			i;
+	int			sum;
+	t_philo		*philos;
+
+	philos = (t_philo *)data;
+	while (1)
+	{
+		i = 0;
+		sum = 0;
+		while (i < g_info.number_of_philosophers)
+		{
+			if (philos[i].status == DIED || \
+				philos[i].eat_count >= g_info.must_eat)
+				sum += 1;
+			i++;
+		}
+		if (sum == g_info.number_of_philosophers)
+		{
+			g_finish = 1;
+			return (0);
+		}
+		usleep(100000);
+	}
 }

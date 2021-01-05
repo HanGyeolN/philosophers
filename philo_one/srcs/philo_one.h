@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 08:47:22 by hna               #+#    #+#             */
-/*   Updated: 2021/01/04 08:52:32 by hna              ###   ########.fr       */
+/*   Updated: 2021/01/04 09:43:05 by hna              ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ int				get_timestamp_ms(void);
 void			set_status(t_philo *philo, int status);
 int				am_i_dead(t_philo *philo);
 int				dead_check_sleep(t_philo *philo, int sleep_time);
+void			*check_finish_option(void *data);
 
 #endif

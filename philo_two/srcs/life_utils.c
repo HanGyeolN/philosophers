@@ -2,11 +2,12 @@
 
 int		get_timestamp_ms(void)
 {
-	int		ret;
+	int				ret;
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	ret = (int)(tv.tv_sec - info.birth.tv_sec) * 1000 + (tv.tv_usec - info.birth.tv_usec) / 1000;
+	ret = (int)(tv.tv_sec - info.birth.tv_sec) * 1000 + \
+		(tv.tv_usec - info.birth.tv_usec) / 1000;
 	return (ret);
 }
 

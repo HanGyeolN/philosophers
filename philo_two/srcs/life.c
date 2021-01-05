@@ -2,31 +2,31 @@
 
 void    wait_fork(t_philo *philo)
 {
-    sem_wait(sp_nfork);
+    sem_wait(g_sp_nfork);
     if (num_available_forks >= 2)
     {
         num_available_forks -= 2;
-        sem_post(sp_nfork);
-        sem_wait(fork_sem);
-        sem_wait(sp_print);
+        sem_post(g_sp_nfork);
+        sem_wait(g_fork_sem);
+        sem_wait(g_sp_print);
         set_status(philo, TAKE_FORK);
-        sem_post(sp_print);
-        sem_wait(fork_sem);
-        sem_wait(sp_print);
+        sem_post(g_sp_print);
+        sem_wait(g_fork_sem);
+        sem_wait(g_sp_print);
         set_status(philo, TAKE_FORK);
-        sem_post(sp_print);
+        sem_post(g_sp_print);
     }
     else
-        sem_post(sp_nfork);
+        sem_post(g_sp_nfork);
 }
 
 int    take_fork(t_philo *philo)
 {
     if (g_finish == 1)
         return (1);
-    sem_wait(sp_print);
+    sem_wait(g_sp_print);
     set_status(philo, EATING);
-    sem_post(sp_print);
+    sem_post(g_sp_print);
     return (0);
 }
 
@@ -34,22 +34,22 @@ int     eating(t_philo *philo)
 {
     if (dead_check_sleep(philo, info.time_to_eat) == 1)
     {
-        sem_post(fork_sem);
-        sem_post(fork_sem);
-        sem_wait(sp_nfork);
+        sem_post(g_fork_sem);
+        sem_post(g_fork_sem);
+        sem_wait(g_sp_nfork);
         num_available_forks += 2;
-        sem_post(sp_nfork);
+        sem_post(g_sp_nfork);
         return (1);
     }
-    sem_post(fork_sem);
-    sem_post(fork_sem);
-    sem_wait(sp_nfork);
+    sem_post(g_fork_sem);
+    sem_post(g_fork_sem);
+    sem_wait(g_sp_nfork);
     num_available_forks += 2;
-    sem_post(sp_nfork);
-    sem_wait(sp_print);
+    sem_post(g_sp_nfork);
+    sem_wait(g_sp_print);
     philo->last_eat = get_timestamp_ms();
     set_status(philo, SLEEPING);
-    sem_post(sp_print);
+    sem_post(g_sp_print);
     philo->eat_count += 1;
     return (0);
 }
@@ -58,9 +58,9 @@ int     sleeping(t_philo *philo)
 {
     if (dead_check_sleep(philo, info.time_to_sleep) == 1 || g_finish == 1)
         return (1);
-    sem_wait(sp_print);
+    sem_wait(g_sp_print);
     set_status(philo, THINKING);
-    sem_post(sp_print);
+    sem_post(g_sp_print);
     return (0);
 }
 
